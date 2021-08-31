@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const Record = require('./models/record')//load Record model
+const exhbs = require('express-handlebars')
 
 const port = 3000
 const app = express()
@@ -18,9 +19,15 @@ db.once('open', () => {
 })
 //------------ database ------------//
 
+//------------ template engine ------------//
+app.engine('hbs', exhbs({ defaultLayout: 'main', extname: 'hbs' }))
+app.set('view engine', 'hbs')
+//------------ template engine ------------//
+
+
 //Setting Routes
 app.get('/', (req, res) => {
-  res.send('test!')
+  res.render('index')
 })
 
 app.listen(port, () => {
