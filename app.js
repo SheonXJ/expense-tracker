@@ -27,7 +27,10 @@ app.set('view engine', 'hbs')
 
 //Setting Routes
 app.get('/', (req, res) => {
-  res.render('index')
+  Record.find()
+  .lean()
+  .then(records => res.render('index', { records }))
+  .catch(error => console.log(error))
 })
 
 app.listen(port, () => {
