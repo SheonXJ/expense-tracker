@@ -1,11 +1,40 @@
-<ul>
-  {{#each records}}
-  <li class="d-flex">
-    <div>{{this.id}}</div>
-    <div>{{this.name}}</div>
-    <div>{{this.date}}</div>
-    <div>{{this.amount}}</div>
-    <div>{{this.category}}</div>
-  </li>
-  {{/each}}
-</ul>
+<div class="container search-bar mt-5 ">
+  <div class="categoryOption mb-5 mx-auto" style="display: block; width: 640px;">
+    <select class="form-control" value="類別...">
+      <option>類別...</option>
+      <option href="/">家居物業</option>
+      <option href="/">交通出行</option>
+      <option href="/">休閒娛樂</option>
+      <option href="/">餐飲食品</option>
+      <option href="/">其他</option>
+    </select>
+  </div>
+</div>
+
+<div class="container totalAmount my-5">
+  <div class="row">
+    <div class="col-6 mx-auto d-flex justify-content-center">
+      總金額:
+      <h1>20000</h1>
+    </div>
+  </div>
+</div>
+
+<div class="container recordList mt-5">
+  <div class="row">
+    <div class="col-8 mx-auto">
+      {{#each records}}
+      <div class="d-flex align-items-center text-center border border-info">
+        <div class="col-3">
+          <i>category</i>
+        </div>
+        <div class="col-6 flex-column text-left">
+          <h4>{{this.name}}</h4>
+          {{this.date}}
+        </div>
+        <div class="col-3">{{this.amount}}</div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</div>
