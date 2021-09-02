@@ -29,7 +29,11 @@ app.set('view engine', 'hbs')
 app.get('/', (req, res) => {
   Record.find()
   .lean()
-  .then(records => res.render('index', { records }))
+  .then(records => {
+    //轉換Date輸出格式
+    records.forEach(record => record.date = new Date(record.date).toLocaleDateString())
+    res.render('index', { records })
+  })
   .catch(error => console.log(error))
 })
 
