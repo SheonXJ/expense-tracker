@@ -3,6 +3,15 @@ const mongoose = require('mongoose')
 const Record = require('./models/record')//load Record model
 const methodOverride = require('method-override')
 const exhbs = require('express-handlebars')
+const dateformat = require('dateformat')
+
+const date = new Date()
+//導入function 現在日期
+Date.prototype.toDateInputValue = (function () {
+  var local = new Date(this);
+  local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+  return local.toJSON().slice(0, 10);
+})
 
 const port = 3000
 const app = express()
@@ -22,7 +31,11 @@ db.once('open', () => {
 
 
 //------------ template engine ------------//
-app.engine('hbs', exhbs({ defaultLayout: 'main', extname: 'hbs' }))
+app.engine('hbs', exhbs({ 
+  defaultLayout: 'main', 
+  extname: 'hbs',
+  helpers: require('./config/handlebars-helpers')
+}))
 app.set('view engine', 'hbs')
 //------------ template engine ------------//
 
@@ -30,6 +43,8 @@ app.set('view engine', 'hbs')
 //------------ Setting ------------//
 //Setting method-override 路由覆蓋機制
 app.use(methodOverride('_method'))
+//Setting body-parser 進行前置處理
+app.use(express.urlencoded({ extended: true }))
 //------------ Setting ------------//
 
 
@@ -50,13 +65,38 @@ app.get('/', (req, res) => {
 app.get('/expenseTracker/:id/edit', (req, res) => {
   Record.findOne({id: req.params.id})
     .lean()
-    .then(record => res.render('edit', {record}))
+    .then(record => {
+      record.date = dateformat(record.date, 'yyyy-mm-dd')
+      res.render('edit', { record })
+    })
     .catch(error => console.log(error))
 })
 
 //Route: create page
 app.get('/expenseTracker/create', (req, res) => {
-  res.render('create')
+  const nowDate = date.toDateInputValue()
+  res.render('create', { nowDate })
+})
+
+//Route: catch create record date
+app.post('/expenseTracker/create', (req, res) => {
+  const { name, date, category, amount } = req.body
+  Record.find()
+    .sort({ "id": -1 })
+    .limit(1)
+    .lean()
+    .then(record => {
+      const id = ++record[0].id
+      Record.create({
+        id,
+        name,
+        date,
+        category,
+        amount,
+      })
+    })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
 })
 
 //Route: delete record data
