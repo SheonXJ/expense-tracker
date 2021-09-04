@@ -1,8 +1,6 @@
 const mongoose = require('mongoose')
 const Record = require('../record')//load Record model
-
-mongoose.connect(`mongodb://localhost/Expense`, { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
+const db = require('../../config/mongoose')
 
 //create seed data
 const recordData = [
@@ -14,9 +12,6 @@ const recordData = [
 ]
 
 //setting connecting status
-db.on('error', () => {
-  console.log('Mongodb error')
-})
 db.once('open', () => {
   recordData.forEach(record => {
     Record.create({
