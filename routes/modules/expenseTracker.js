@@ -6,9 +6,9 @@ const dateformat = require('dateformat')
 //引用Record model
 const Record = require('../../models/record')
 //引用ICON
-const CATEGORY = require('../../config/categoryIcon')
+const CATEGORY = require('../../tools/categoryIcon')
 //引用DatePrototype
-const date = require('../../config/DatePrototype')
+const date = require('../../tools/DatePrototype')
 
 //Route: edit page
 router.get('/:id/edit', (req, res) => {

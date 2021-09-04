@@ -6,7 +6,7 @@ const Record = require('../../models/record')
 //引用dateformat(轉換date format)
 const dateformat = require('dateformat')
 //引用ICON
-const CATEGORY = require('../../config/categoryIcon')
+const CATEGORY = require('../../tools/categoryIcon')
 
 
 //Route: index page
