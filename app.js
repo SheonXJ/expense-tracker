@@ -15,6 +15,8 @@ app.engine('hbs', exhbs({
   helpers: require('./config/handlebars-helpers')
 }))
 app.set('view engine', 'hbs')
+//Setting static files
+app.use(express.static('public'))
 //Setting method-override 路由覆蓋機制
 app.use(methodOverride('_method'))
 //Setting body-parser 進行前置處理
