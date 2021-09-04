@@ -5,10 +5,10 @@ const router = express.Router()
 const dateformat = require('dateformat')
 //引用Record model
 const Record = require('../../models/record')
-//引用ICON
-const CATEGORY = require('../../tools/categoryIcon')
 //引用DatePrototype
 const date = require('../../tools/DatePrototype')
+//引用function tools [switchCategoryIcon]
+const method = require('../../tools/switchCategoryIcon')
 
 //Route: edit page
 router.get('/:id/edit', (req, res) => {
@@ -76,23 +76,7 @@ router.get('/search', (req, res) => {
       let totalAmount = 0
       records.forEach(record => {
         record.date = dateformat(record.date, 'yyyy-mm-dd')
-        switch (record.category) {
-          case '家居物業':
-            record.icon = CATEGORY.home
-            break
-          case '交通出行':
-            record.icon = CATEGORY.transportation
-            break
-          case '休閒娛樂':
-            record.icon = CATEGORY.entertainment
-            break
-          case '餐飲食品':
-            record.icon = CATEGORY.food
-            break
-          case '其他':
-            record.icon = CATEGORY.else
-            break
-        }
+        record.icon = method.switchCategoryIcon(record.category)
         totalAmount += record.amount
       })
       res.render('index', { records, sort, totalAmount })
