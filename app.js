@@ -1,25 +1,9 @@
+//Require packages in the project
 const express = require('express')
 const mongoose = require('mongoose')
-const Record = require('./models/record')//load Record model
 const methodOverride = require('method-override')
 const exhbs = require('express-handlebars')
-const dateformat = require('dateformat')
-
-const date = new Date()
-//導入function 現在日期
-Date.prototype.toDateInputValue = (function () {
-  var local = new Date(this);
-  local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
-  return local.toJSON().slice(0, 10);
-})
-
-const CATEGORY = {
-  home: 'fas fa-home fa-3x',
-  transportation: 'fas fa-shuttle-van fa-3x',
-  entertainment: 'fas fa-grin-beam fa-3x',
-  food: 'fas fa-utensils fa-3x',
-  else: 'fas fa-pen fa-3x',
-}
+const routes = require('./routes')
 
 const port = 3000
 const app = express()
@@ -53,140 +37,9 @@ app.set('view engine', 'hbs')
 app.use(methodOverride('_method'))
 //Setting body-parser 進行前置處理
 app.use(express.urlencoded({ extended: true }))
+// 將 request 導入路由器
+app.use(routes)
 //------------ Setting ------------//
-
-
-//------------ Setting Routes ------------//
-//Route: index page
-app.get('/', (req, res) => {
-  Record.find()
-    .lean()
-    .then(records => {
-      let totalAmount = 0
-      records.forEach(record => {
-        //轉換Date輸出格式
-        record.date = dateformat(record.date, 'yyyy-mm-dd')
-        switch (record.category) {
-          case '家居物業':
-            record.icon = CATEGORY.home
-            break
-          case '交通出行':
-            record.icon = CATEGORY.transportation
-            break
-          case '休閒娛樂':
-            record.icon = CATEGORY.entertainment
-            break
-          case '餐飲食品':
-            record.icon = CATEGORY.food
-            break
-          case '其他':
-            record.icon = CATEGORY.else
-            break
-        }
-        totalAmount += record.amount
-      })
-      res.render('index', { records, totalAmount })
-    })
-    .catch(error => console.log(error))
-})
-
-//Route: edit page
-app.get('/expenseTracker/:id/edit', (req, res) => {
-  Record.findOne({id: req.params.id})
-    .lean()
-    .then(record => {
-      record.date = dateformat(record.date, 'yyyy-mm-dd')
-      res.render('edit', { record })
-    })
-    .catch(error => console.log(error))
-})
-
-//Route: save edit record data
-app.put('/expenseTracker/:id/edit', (req, res) => {
-  const id = req.params.id
-  const { name, date, amount, category} = req.body
-  return Record.findOne({id})
-    .then(record => {
-      record.name = name
-      record.date = date
-      record.amount = amount
-      record.category = category
-      return record.save()
-    })
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
-
-//Route: create page
-app.get('/expenseTracker/create', (req, res) => {
-  const nowDate = date.toDateInputValue()
-  res.render('create', { nowDate })
-})
-
-//Route: catch create record date
-app.post('/expenseTracker/create', (req, res) => {
-  const { name, date, category, amount } = req.body
-  Record.find()
-    .sort({ "id": -1 })
-    .limit(1)
-    .lean()
-    .then(record => {
-      const id = ++record[0].id
-      Record.create({
-        id,
-        name,
-        date,
-        category,
-        amount,
-      })
-    })
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
-
-//Route: search record data
-app.get('/expenseTracker/search', (req, res) => {
-  const sort = req.query.sort
-  if (sort === 'all') {
-    return res.redirect('/')
-  }
-  Record.find({category: sort})
-    .lean()
-    .then(records => {
-      let totalAmount = 0
-      records.forEach(record => {
-        record.date = dateformat(record.date, 'yyyy-mm-dd')
-        switch (record.category) {
-          case '家居物業':
-            record.icon = CATEGORY.home
-            break
-          case '交通出行':
-            record.icon = CATEGORY.transportation
-            break
-          case '休閒娛樂':
-            record.icon = CATEGORY.entertainment
-            break
-          case '餐飲食品':
-            record.icon = CATEGORY.food
-            break
-          case '其他':
-            record.icon = CATEGORY.else
-            break
-        }
-        totalAmount += record.amount
-      })
-      res.render('index', { records, sort, totalAmount })
-    })
-    .catch(error => console.log(error))
-})
-
-//Route: delete record data
-app.delete('/expenseTracker/:id', (req, res) => {
-  return Record.deleteOne({id: req.params.id})
-  .then(() => res.redirect('/'))
-  .catch(error => console.log(error))
-})
-//------------ Setting Routes ------------//
 
 
 app.listen(port, () => {
