@@ -52,13 +52,17 @@ app.use(express.urlencoded({ extended: true }))
 //Route: index page
 app.get('/', (req, res) => {
   Record.find()
-  .lean()
-  .then(records => {
-    //轉換Date輸出格式
-    records.forEach(record => record.date = new Date(record.date).toLocaleDateString())
-    res.render('index', { records })
-  })
-  .catch(error => console.log(error))
+    .lean()
+    .then(records => {
+      let totalAmount = 0
+      records.forEach(record => {
+        //轉換Date輸出格式
+        record.date = dateformat(record.date, 'yyyy-mm-dd')
+        totalAmount += record.amount
+      })
+      res.render('index', { records, totalAmount })
+    })
+    .catch(error => console.log(error))
 })
 
 //Route: edit page
@@ -69,6 +73,22 @@ app.get('/expenseTracker/:id/edit', (req, res) => {
       record.date = dateformat(record.date, 'yyyy-mm-dd')
       res.render('edit', { record })
     })
+    .catch(error => console.log(error))
+})
+
+//Route: save edit record data
+app.put('/expenseTracker/:id/edit', (req, res) => {
+  const id = req.params.id
+  const { name, date, amount, category} = req.body
+  return Record.findOne({id})
+    .then(record => {
+      record.name = name
+      record.date = date
+      record.amount = amount
+      record.category = category
+      return record.save()
+    })
+    .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 

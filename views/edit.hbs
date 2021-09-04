@@ -6,7 +6,7 @@
 <div class="container my-2 p-2">
   <div class="row">
     <div class="col-5 mx-auto">
-      <form action="/expenseTracker/create" method="POST">
+      <form action="/expenseTracker/{{record.id}}/edit?_method=PUT" method="POST">
         <div class="form-group form-row text-center">
           <div class="col-4 my-auto" style="letter-spacing:10px;">
             <label for="name">名稱*</label>
