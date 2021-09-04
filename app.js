@@ -13,6 +13,14 @@ Date.prototype.toDateInputValue = (function () {
   return local.toJSON().slice(0, 10);
 })
 
+const CATEGORY = {
+  home: 'fas fa-home fa-3x',
+  transportation: 'fas fa-shuttle-van fa-3x',
+  entertainment: 'fas fa-grin-beam fa-3x',
+  food: 'fas fa-utensils fa-3x',
+  else: 'fas fa-pen fa-3x',
+}
+
 const port = 3000
 const app = express()
 
@@ -58,6 +66,23 @@ app.get('/', (req, res) => {
       records.forEach(record => {
         //轉換Date輸出格式
         record.date = dateformat(record.date, 'yyyy-mm-dd')
+        switch (record.category) {
+          case '家居物業':
+            record.icon = CATEGORY.home
+            break
+          case '交通出行':
+            record.icon = CATEGORY.transportation
+            break
+          case '休閒娛樂':
+            record.icon = CATEGORY.entertainment
+            break
+          case '餐飲食品':
+            record.icon = CATEGORY.food
+            break
+          case '其他':
+            record.icon = CATEGORY.else
+            break
+        }
         totalAmount += record.amount
       })
       res.render('index', { records, totalAmount })
@@ -128,10 +153,29 @@ app.get('/expenseTracker/search', (req, res) => {
   Record.find({category: sort})
     .lean()
     .then(records => {
+      let totalAmount = 0
       records.forEach(record => {
         record.date = dateformat(record.date, 'yyyy-mm-dd')
+        switch (record.category) {
+          case '家居物業':
+            record.icon = CATEGORY.home
+            break
+          case '交通出行':
+            record.icon = CATEGORY.transportation
+            break
+          case '休閒娛樂':
+            record.icon = CATEGORY.entertainment
+            break
+          case '餐飲食品':
+            record.icon = CATEGORY.food
+            break
+          case '其他':
+            record.icon = CATEGORY.else
+            break
+        }
+        totalAmount += record.amount
       })
-      res.render('index', { records, sort })
+      res.render('index', { records, sort, totalAmount })
     })
     .catch(error => console.log(error))
 })
