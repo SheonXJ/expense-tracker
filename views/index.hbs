@@ -1,13 +1,15 @@
 <div class="container search-bar mt-5 ">
   <div class="categoryOption mb-5 mx-auto" style="display: block; width: 640px;">
-    <select class="form-control" value="類別...">
-      <option>類別...</option>
-      <option href="/">家居物業</option>
-      <option href="/">交通出行</option>
-      <option href="/">休閒娛樂</option>
-      <option href="/">餐飲食品</option>
-      <option href="/">其他</option>
-    </select>
+    <form action="/expenseTracker/search" method="GET">
+      <select class="form-control" name="sort" id="sort" onchange="this.form.submit()">
+        <option value="all">類別...</option>
+        <option value="家居物業" {{#ifeq sort "家居物業"}}selected{{/ifeq}}>家居物業</option>
+        <option value="交通出行" {{#ifeq sort "交通出行"}}selected{{/ifeq}}>交通出行</option>
+        <option value="休閒娛樂" {{#ifeq sort "休閒娛樂"}}selected{{/ifeq}}>休閒娛樂</option>
+        <option value="餐飲食品" {{#ifeq sort "餐飲食品"}}selected{{/ifeq}}>餐飲食品</option>
+        <option value="其他" {{#ifeq sort "其他" }}selected{{/ifeq}}>其他</option>
+      </select>
+    </form>
   </div>
 </div>
 

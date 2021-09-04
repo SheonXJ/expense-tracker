@@ -119,6 +119,23 @@ app.post('/expenseTracker/create', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//Route: search record data
+app.get('/expenseTracker/search', (req, res) => {
+  const sort = req.query.sort
+  if (sort === 'all') {
+    return res.redirect('/')
+  }
+  Record.find({category: sort})
+    .lean()
+    .then(records => {
+      records.forEach(record => {
+        record.date = dateformat(record.date, 'yyyy-mm-dd')
+      })
+      res.render('index', { records, sort })
+    })
+    .catch(error => console.log(error))
+})
+
 //Route: delete record data
 app.delete('/expenseTracker/:id', (req, res) => {
   return Record.deleteOne({id: req.params.id})
