@@ -5,15 +5,8 @@ const router = express.Router()
 const Record = require('../../models/record')
 //引用dateformat(轉換date format)
 const dateformat = require('dateformat')
-
 //引用ICON
-const CATEGORY = {
-  home: 'fas fa-home fa-3x',
-  transportation: 'fas fa-shuttle-van fa-3x',
-  entertainment: 'fas fa-grin-beam fa-3x',
-  food: 'fas fa-utensils fa-3x',
-  else: 'fas fa-pen fa-3x',
-}
+const CATEGORY = require('../../config/categoryIcon')
 
 
 //Route: index page

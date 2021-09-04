@@ -1,19 +1,14 @@
 // 引用 Express 與 Express 路由器
 const express = require('express')
 const router = express.Router()
-//引用Record model
-const Record = require('../../models/record')
 //引用dateformat(轉換date format)
 const dateformat = require('dateformat')
-
+//引用Record model
+const Record = require('../../models/record')
 //引用ICON
-const CATEGORY = {
-  home: 'fas fa-home fa-3x',
-  transportation: 'fas fa-shuttle-van fa-3x',
-  entertainment: 'fas fa-grin-beam fa-3x',
-  food: 'fas fa-utensils fa-3x',
-  else: 'fas fa-pen fa-3x',
-}
+const CATEGORY = require('../../config/categoryIcon')
+
+
 const date = new Date()
 //導入function 現在日期
 Date.prototype.toDateInputValue = (function () {
