@@ -1,8 +1,10 @@
 //Require mongoose
 const mongoose = require('mongoose')
 
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/Expense'
+
 //Setting database
-mongoose.connect('mongodb://localhost/Expense', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection
 
 db.on('error', () => {
