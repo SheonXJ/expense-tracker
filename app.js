@@ -4,6 +4,8 @@ const methodOverride = require('method-override')
 const exhbs = require('express-handlebars')
 const session = require('express-session')
 const routes = require('./routes')
+
+const usePassport = require('./config/passport')
 require('./config/mongoose')
 
 const PORT = process.env.PORT || 3000
@@ -22,6 +24,8 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+//Setting passport
+usePassport(app)
 //Setting static files
 app.use(express.static('public'))
 //Setting method-override 路由覆蓋機制
