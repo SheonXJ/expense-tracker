@@ -2,6 +2,7 @@
 const express = require('express')
 const methodOverride = require('method-override')
 const exhbs = require('express-handlebars')
+const session = require('express-session')
 const routes = require('./routes')
 require('./config/mongoose')
 
@@ -15,6 +16,12 @@ app.engine('hbs', exhbs({
   helpers: require('./config/handlebars-helpers')
 }))
 app.set('view engine', 'hbs')
+//Setting Session
+app.use(session({
+  secret: 'thisIsMySecret',
+  resave: false,
+  saveUninitialized: true
+}))
 //Setting static files
 app.use(express.static('public'))
 //Setting method-override 路由覆蓋機制
