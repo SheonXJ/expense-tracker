@@ -4,10 +4,6 @@ const Schema = mongoose.Schema
 
 //create Schema
 const recordSchema = new Schema({
-  id: {
-    type: Number,
-    require: true,
-  },
   name: {
     type: String,
     require: true,
@@ -24,6 +20,12 @@ const recordSchema = new Schema({
     type: String,
     require: true,
   },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    index: true,
+    required: true
+  }
 })
 
 //output model

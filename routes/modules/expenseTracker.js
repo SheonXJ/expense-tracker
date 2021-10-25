@@ -12,7 +12,9 @@ const method = require('../../tools/switchCategoryIcon')
 
 //Route: edit page
 router.get('/:id/edit', (req, res) => {
-  Record.findOne({ id: req.params.id })
+  const userId = req.user._id
+  const id = req.params.id
+  Record.findOne({ id, userId })
     .lean()
     .then(record => {
       record.date = dateformat(record.date, 'yyyy-mm-dd')
@@ -23,9 +25,10 @@ router.get('/:id/edit', (req, res) => {
 
 //Route: save edit record data
 router.put('/:id/edit', (req, res) => {
+  const userId = req.user._id
   const id = req.params.id
   const { name, date, amount, category } = req.body
-  return Record.findOne({ id })
+  return Record.findOne({ id, userId })
     .then(record => {
       record.name = name
       record.date = date
@@ -46,31 +49,26 @@ router.get('/create', (req, res) => {
 //Route: catch create record date
 router.post('/create', (req, res) => {
   const { name, date, category, amount } = req.body
-  Record.find()
-    .sort({ "id": -1 })
-    .limit(1)
-    .lean()
-    .then(record => {
-      const id = ++record[0].id
-      Record.create({
-        id,
-        name,
-        date,
-        category,
-        amount,
-      })
-    })
+  const userId = req.user._id
+  return Record.create({
+    name,
+    date,
+    category,
+    amount,
+    userId,
+  })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 
 //Route: search record data
 router.get('/search', (req, res) => {
+  const userId = req.user._id
   const sort = req.query.sort
   if (sort === 'all') {
     return res.redirect('/')
   }
-  Record.find({ category: sort })
+  Record.find({ category: sort, userId })
     .lean()
     .then(records => {
       let totalAmount = 0
@@ -86,7 +84,9 @@ router.get('/search', (req, res) => {
 
 //Route: delete record data
 router.delete('/:id', (req, res) => {
-  return Record.deleteOne({ id: req.params.id })
+  const userId = req.user._id
+  const id = req.params.id
+  return Record.deleteOne({ id, userId })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })

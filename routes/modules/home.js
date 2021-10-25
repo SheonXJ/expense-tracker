@@ -10,7 +10,8 @@ const method = require('../../tools/switchCategoryIcon')
 
 //Route: index page
 router.get('/', (req, res) => {
-  Record.find()
+  const userId = req.user._id
+  Record.find({ userId })
     .lean()
     .then(records => {
       let totalAmount = 0
