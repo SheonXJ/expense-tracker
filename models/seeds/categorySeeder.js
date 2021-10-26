@@ -6,7 +6,7 @@ const SEED_CATEGORY = [
   {
     name: 'home',
     name_cn: '家居物業',
-    categoryId: 'fas fa- home fa - 3x'
+    categoryId: 'fas fa-house-user fa-3x'
   },
   {
     name: 'transportation',

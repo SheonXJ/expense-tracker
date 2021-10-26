@@ -5,6 +5,8 @@ const router = express.Router()
 const dateformat = require('dateformat')
 //引用Record model
 const Record = require('../../models/record')
+//引用Record model
+const Category = require('../../models/category')
 //引用DatePrototype
 const date = require('../../tools/DatePrototype')
 //引用function tools [switchCategoryIcon]
@@ -13,8 +15,9 @@ const method = require('../../tools/switchCategoryIcon')
 //Route: edit page
 router.get('/:id/edit', (req, res) => {
   const userId = req.user._id
-  const id = req.params.id
-  Record.findOne({ id, userId })
+  const _id = req.params.id
+  Record.findOne({ _id, userId })
+    .populate('category', 'name_cn')
     .lean()
     .then(record => {
       record.date = dateformat(record.date, 'yyyy-mm-dd')
@@ -26,18 +29,21 @@ router.get('/:id/edit', (req, res) => {
 //Route: save edit record data
 router.put('/:id/edit', (req, res) => {
   const userId = req.user._id
-  const id = req.params.id
+  const _id = req.params.id
   const { name, date, amount, category } = req.body
-  return Record.findOne({ id, userId })
-    .then(record => {
-      record.name = name
-      record.date = date
-      record.amount = amount
-      record.category = category
-      return record.save()
+  return Category.findOne({ name_cn: category })
+    .then(category => {
+      Record.findOne({ _id, userId })
+        .then(record => {
+          record.name = name
+          record.date = date
+          record.amount = amount
+          record.category = category
+          return record.save()
+        })
+        .then(() => res.redirect('/'))
+        .catch(error => console.log(error))
     })
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
 })
 
 //Route: create page
@@ -50,13 +56,16 @@ router.get('/create', (req, res) => {
 router.post('/create', (req, res) => {
   const { name, date, category, amount } = req.body
   const userId = req.user._id
-  return Record.create({
-    name,
-    date,
-    category,
-    amount,
-    userId,
-  })
+  return Category.findOne({ name_cn: category})
+    .then(category => {
+      Record.create({
+        name,
+        date,
+        category,
+        amount,
+        userId,
+      })
+    })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
@@ -85,8 +94,8 @@ router.get('/search', (req, res) => {
 //Route: delete record data
 router.delete('/:id', (req, res) => {
   const userId = req.user._id
-  const id = req.params.id
-  return Record.deleteOne({ id, userId })
+  const _id = req.params.id
+  return Record.deleteOne({ _id, userId })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })

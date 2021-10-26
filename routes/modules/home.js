@@ -3,6 +3,8 @@ const express = require('express')
 const router = express.Router()
 //引用Record model
 const Record = require('../../models/record')
+//引用Category model
+const Category = require('../../models/category')
 //引用dateformat(轉換date format)
 const dateformat = require('dateformat')
 //引用function tools [switchCategoryIcon]
@@ -12,13 +14,15 @@ const method = require('../../tools/switchCategoryIcon')
 router.get('/', (req, res) => {
   const userId = req.user._id
   Record.find({ userId })
+    .populate('category', 'categoryId')
+    .sort({ date: -1 })
     .lean()
     .then(records => {
       let totalAmount = 0
       records.forEach(record => {
         //轉換Date輸出格式
         record.date = dateformat(record.date, 'yyyy-mm-dd')
-        record.icon = method.switchCategoryIcon(record.category)
+        record.icon = record.category.categoryId
         totalAmount += record.amount
       })
       res.render('index', { records, totalAmount })

@@ -6,19 +6,21 @@ const Schema = mongoose.Schema
 const recordSchema = new Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
   },
   date: {
     type: Date,
-    require: true,
+    required: true,
   },
   amount: {
     type: Number,
-    require: true,
+    required: true,
   },
   category: {
-    type: String,
-    require: true,
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+    index: true,
+    required: true,
   },
   userId: {
     type: Schema.Types.ObjectId,

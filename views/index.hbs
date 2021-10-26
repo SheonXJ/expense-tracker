@@ -28,7 +28,7 @@
       {{#each records}}
       <div class="d-flex align-items-center text-center border-bottom border-info">
         <div class="col-2">
-          <i class="{{this.icon}}"></i>
+          <i class='{{this.icon}}'></i>
         </div>
         <div class="col-4 flex-column text-left">
           <h4>{{this.name}}</h4>
@@ -36,11 +36,11 @@
         </div>
         <div class="col-2">{{this.amount}}</div>
         <div class="col-2">
-          <a href="/expenseTracker/{{this.id}}/edit">
+          <a href="/expenseTracker/{{this._id}}/edit">
             <button class="btn btn-primary">修改</button>
           </a>
         </div>
-        <form action="/expenseTracker/{{this.id}}?_method=DELETE" method="POST">
+        <form action="/expenseTracker/{{this._id}}?_method=DELETE" method="POST">
           <button type="submit" class="btn btn-danger">刪除</button>
         </form>
       </div>
