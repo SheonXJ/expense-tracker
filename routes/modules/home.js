@@ -3,12 +3,8 @@ const express = require('express')
 const router = express.Router()
 //引用Record model
 const Record = require('../../models/record')
-//引用Category model
-const Category = require('../../models/category')
 //引用dateformat(轉換date format)
 const dateformat = require('dateformat')
-//引用function tools [switchCategoryIcon]
-const method = require('../../tools/switchCategoryIcon')
 
 //Route: index page
 router.get('/', (req, res) => {

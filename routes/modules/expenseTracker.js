@@ -9,8 +9,6 @@ const Record = require('../../models/record')
 const Category = require('../../models/category')
 //引用DatePrototype
 const date = require('../../tools/DatePrototype')
-//引用function tools [switchCategoryIcon]
-const method = require('../../tools/switchCategoryIcon')
 
 //Route: edit page
 router.get('/:id/edit', (req, res) => {
