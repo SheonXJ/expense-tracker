@@ -77,16 +77,22 @@ router.get('/search', (req, res) => {
   if (sort === 'all') {
     return res.redirect('/')
   }
-  Record.find({ category: sort, userId })
+  //搜尋此使用者所有資料
+  Record.find({ userId })
+    .populate('category')
+    .sort({ date: -1 })
     .lean()
-    .then(records => {
+    .then(searchRecords => {
+      //從使用者資料篩選符合sort的資料
+      const records = searchRecords.filter(record => record.category.name_cn === sort)
       let totalAmount = 0
       records.forEach(record => {
+        //轉換Date輸出格式
         record.date = dateformat(record.date, 'yyyy-mm-dd')
-        record.icon = method.switchCategoryIcon(record.category)
+        record.icon = record.category.categoryId
         totalAmount += record.amount
       })
-      res.render('index', { records, sort, totalAmount })
+      res.render('index', { records, totalAmount, sort })
     })
     .catch(error => console.log(error))
 })
