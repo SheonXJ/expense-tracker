@@ -1,5 +1,8 @@
-const db = require('../../config/mongoose')
 const Category = require('../category') //load model
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+const db = require('../../config/mongoose')
 
 //seed data
 const SEED_CATEGORY = [
@@ -29,7 +32,6 @@ const SEED_CATEGORY = [
     categoryId: 'fas fa-pen fa-3x'
   },
 ]
-
 
 db.once('open', () => {
   Category.create(SEED_CATEGORY)
