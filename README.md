@@ -1,40 +1,56 @@
-# Expense Tracker 1.0
-This website provides users record of daily expenses.
+# Expense Tracker
+此專案提供使用者紀錄支出(包含:名稱、日期、類別、金額...)
 
-## How to Use
-* Git clone this project.(Use Terminal)
+## 功能列表
+* 可以`註冊帳號`及使用`Facebook第三方登入方式`及`登出`
+* 可以`新增支出`(包含名稱、日期、類別、金額等資料)
+* 可以`修改`已建立之支出資料
+* 可以`刪除`已建立之支出資料
+* 可以選擇類別`搜尋`此類別資料
+
+## 安裝流程
+* 利用終端機(Terminal)，Clone專案至目標位置
 
   ```
-  git clone https://github.com/TimZXJ/ExpenseTracker.git
+  git clone https://github.com/TimZXJ/expense-tracker.git
   ```
-* `cd` to expense-tracker file.(Use Terminal)
+
+* 進入專案資料夾
 
   ```
   cd expense-tracker
   ```
-* Install npm packages.(Use Terminal)
+
+* 安裝 npm packages
 
   ```
   npm install
   ```
-* Create dummy data of record on database.(Use Terminal)
+
+* 載入種子資料
 
   ```
   npm run seed
   ```
-* Start the server.(Use Terminal)
+
+* 開啟伺服器
 
   ```
   npm run dev
   ```
-* When Terminal show `App is running on http://localhost:3000`, you can use any browser and type http://localhost:3000 to enter the website.
+  * 當終端機(Terminal)出現`App is running on http://localhost:3000`表示伺服器已成功開啟。
 
-## Packages and versions
-* npm: 6.4.1
-* express: 4.17.1
-* express-handlebars: 5.3.3
-* method-override: 3.0.0
-* dateformat: 4.5.1
-* mongoose: 5.13.7
-* nodemon: 2.0.12
-* bootstrap: 4.6.0
+* 在瀏覽器中入輸入網址:http://localhost:3000
+
+## 種子資料
+```
+name: user1
+email: user1@example.com
+password: 12345678
+```
+
+```
+name: user2
+email: user2@example.com
+password: 12345678
+```
